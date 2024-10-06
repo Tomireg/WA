@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Search Weather</h2>
+    <form method="POST" class="form-inline">
+        {% csrf_token %}
+        <div class="form-group mb-2">
+            {{ form.location }}
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Search</button>
+    </form>
+
+    {% if weather_data %}
+        <div class="mt-4">
+            <h3>Weather in {{ weather_data.name }}</h3>
+            <p>Temperature: {{ weather_data.main.temp }}°C</p>
+            <p>Weather: {{ weather_data.weather.0.description }}</p>
+            <p>Humidity: {{ weather_data.main.humidity }}%</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
