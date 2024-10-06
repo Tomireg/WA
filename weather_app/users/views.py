@@ -3,14 +3,15 @@ from django.contrib.auth import login
 from .forms import UserRegisterForm
 import requests
 from .forms import WeatherSearchForm
+from django.contrib import messages
 
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
+            form.save()
+            messages.success(request, 'Your account has been created! You can now log in.')
+            return redirect('login')  # Redirect to the login page after successful registration
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
