@@ -23,7 +23,7 @@ def weather_search(request):
         form = WeatherSearchForm(request.POST)
         if form.is_valid():
             location = form.cleaned_data['location']
-            api_key = 'YOUR_API_KEY'  # Replace with your OpenWeatherMap API key
+            api_key = 'e16aae9246a1a91b85dcbba7ee8d64ae'  # Replace with your OpenWeatherMap API key
             url = f'http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric'
             response = requests.get(url)
             if response.status_code == 200:
