@@ -4,6 +4,12 @@ from .forms import UserRegisterForm
 import requests
 from .forms import WeatherSearchForm
 from django.contrib import messages
+from django.contrib.auth import logout
+
+# Create your views here.
+def custom_logout(request):
+    logout(request)
+    return render(request, 'users/logout.html')
 
 def register(request):
     if request.method == 'POST':
