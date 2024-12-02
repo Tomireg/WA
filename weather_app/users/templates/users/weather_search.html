@@ -15,15 +15,25 @@
     </form>
 
     {% if weather_data %}
-        <div class="mt-4">
-            <h3>Weather in {{ weather_data.name }}</h3>
-            <p>Temperature: {{ weather_data.main.temp }}°C</p>
-            <p>Weather: {{ weather_data.weather.0.description }}</p>
-            <p>Humidity: {{ weather_data.main.humidity }}%</p>
+    <div class="card mt-4 shadow-sm">
+        <div class="card-body">
+            <h3 class="card-title">Weather in {{ weather_data.name }}</h3>
+            <div class="d-flex align-items-center">
+                <!-- Weather Icon -->
+                <img src="https://openweathermap.org/img/wn/{{ weather_data.weather.0.icon }}@2x.png" alt="Weather icon"
+                    class="mr-3">
+                <!-- Weather Information -->
+                <div>
+                    <p class="mb-1"><strong>Temperature:</strong> {{ weather_data.main.temp }}°C</p>
+                    <p class="mb-1"><strong>Weather:</strong> {{ weather_data.weather.0.description }}</p>
+                    <p class="mb-0"><strong>Humidity:</strong> {{ weather_data.main.humidity }}%</p>
+                </div>
+            </div>
         </div>
+    </div>
     {% endif %}
-</div>
 
-<!-- Include JavaScript for validation -->
-<script src="{% static 'js/form_validation.js' %}"></script>
-{% endblock %}
+
+    <!-- Include JavaScript for validation -->
+    <script src="{% static 'js/form_validation.js' %}"></script>
+    {% endblock %}
