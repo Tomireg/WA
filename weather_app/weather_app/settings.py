@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'wadb_9ggv',  # Replace with your database name
         'USER': 'wadb_9ggv_user',  # Replace with your database user
         'PASSWORD': '2VmjFl9TU1dZvuURuuWmEK9sG0LmuIlo',  # Replace with your database password
-        'HOST': 'postgresql://wadb_9ggv_user:2VmjFl9TU1dZvuURuuWmEK9sG0LmuIlo@dpg-ct6s2t3qf0us738m0pa0-a/wadb_9ggv',  # Replace with your Render database host (e.g., db.postgres.render.com)
+        'HOST': 'dpg-ct6s2t3qf0us738m0pa0-a',  # Replace with your Render database host (e.g., db.postgres.render.com)
         'PORT': '5432',  # Default PostgreSQL port
     }
 }
