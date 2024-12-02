@@ -1,16 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <div class="container mt-4">
     <h2>Login</h2>
-    <form method="POST">
+    <!-- Add an ID to the form for JavaScript validation -->
+    <form id="login-form" method="POST">
         {% csrf_token %}
         <div class="form-group">
-            {{ form.username.label_tag }} {{ form.username }}
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            <!-- Error message placeholder for username -->
+            <small id="username-error" class="form-text text-danger"></small>
         </div>
         <div class="form-group">
-            {{ form.password.label_tag }} {{ form.password }}
+            {{ form.password.label_tag }}
+            {{ form.password }}
+            <!-- Error message placeholder for password -->
+            <small id="password-error" class="form-text text-danger"></small>
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
 </div>
+
+<!-- Include JavaScript for validation -->
+<script src="{% static 'js/form_validation.js' %}"></script>
 {% endblock %}

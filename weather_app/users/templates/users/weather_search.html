@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <div class="container mt-4">
-    <h2>Search for a city to get it's weather</h2>
-    <form method="POST" class="form-inline">
+    <h2>Search for a city to get its weather</h2>
+    <!-- Add an ID to the form for JavaScript validation -->
+    <form id="weather-search-form" method="POST" class="form-inline">
         {% csrf_token %}
         <div class="form-group mb-2">
             {{ form.location }}
+            <!-- Error message placeholder for location -->
+            <small id="location-error" class="form-text text-danger"></small>
         </div>
         <button type="submit" class="btn btn-primary mb-2">Search</button>
     </form>
@@ -19,4 +23,7 @@
         </div>
     {% endif %}
 </div>
+
+<!-- Include JavaScript for validation -->
+<script src="{% static 'js/form_validation.js' %}"></script>
 {% endblock %}
