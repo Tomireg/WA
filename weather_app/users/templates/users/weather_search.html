@@ -3,7 +3,8 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Search for a city to get its weather</h2>
-    <!-- Add an ID to the form for JavaScript validation -->
+
+    <!-- Weather Search Form -->
     <form id="weather-search-form" method="POST" class="form-inline">
         {% csrf_token %}
         <div class="form-group mb-2">
@@ -15,13 +16,13 @@
     </form>
 
     {% if weather_data %}
+    <!-- Weather Data Card -->
     <div class="card mt-4 shadow-sm">
         <div class="card-body">
             <h3 class="card-title">Weather in {{ weather_data.name }}</h3>
             <div class="d-flex align-items-center">
                 <!-- Weather Icon -->
-                <img src="https://openweathermap.org/img/wn/{{ weather_data.weather.0.icon }}@2x.png" alt="Weather icon"
-                    class="mr-3">
+                <img src="https://openweathermap.org/img/wn/{{ weather_data.weather.0.icon }}@2x.png" alt="Weather icon" class="mr-3">
                 <!-- Weather Information -->
                 <div>
                     <p class="mb-1"><strong>Temperature:</strong> {{ weather_data.main.temp }}°C</p>
@@ -31,9 +32,13 @@
             </div>
         </div>
     </div>
+    {% else %}
+        <div class="mt-4 alert alert-danger" role="alert">
+            Sorry, we couldn't find weather data for the city you entered. Please try again with a valid city name.
+        </div>
     {% endif %}
 
-
-    <!-- Include JavaScript for validation -->
+    <!-- Include JavaScript for form validation -->
     <script src="{% static 'js/form_validation.js' %}"></script>
-    {% endblock %}
+</div>
+{% endblock %}
