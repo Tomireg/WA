@@ -60,7 +60,9 @@ def weather_search(request):
 # Home view to display the last weather search
 @login_required
 def home(request):
+    # Get the logged-in user's username
     username = request.user.username
+
     # Get the last weather search for the user
     last_weather_search = WeatherSearch.objects.filter(user=request.user).order_by('-date_searched').first()
 
