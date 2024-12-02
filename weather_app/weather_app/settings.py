@@ -79,8 +79,9 @@ WSGI_APPLICATION = 'weather_app.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgresql://postgres:postgres@localhost:5432/mysite',        conn_max_age=600    )
+    'default': dj_database_url.config(default=os.getenv('postgresql://wadb_9ggv_user:2VmjFl9TU1dZvuURuuWmEK9sG0LmuIlo@dpg-ct6s2t3qf0us738m0pa0-a/wadb_9ggv'), conn_max_age=600)
 }
+
 
 
 # Password validation
