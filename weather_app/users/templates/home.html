@@ -10,13 +10,17 @@
 
     <!-- Display last weather search if available -->
     {% if last_weather_search %}
-        <div class="mt-4">
-            <h4>Last Weather Search</h4>
-            <p><strong>Location:</strong> {{ last_weather_search.location }}</p>
-            <p><strong>Temperature:</strong> {{ last_weather_search.temperature }}°C</p>
-            <p><strong>Weather:</strong> {{ last_weather_search.description }}</p>
-            <p><strong>Humidity:</strong> {{ last_weather_search.humidity }}%</p>
-        </div>
-    {% endif %}
+    <div class="mt-4">
+        <h4>Last Weather Search</h4>
+        <p><strong>Location:</strong> {{ last_weather_search.location }}</p>
+        <p><strong>Temperature:</strong> {{ last_weather_search.temperature }}°C</p>
+        <p><strong>Weather:</strong> {{ last_weather_search.description }}</p>
+        <p><strong>Humidity:</strong> {{ last_weather_search.humidity }}%</p>
+    </div>
+{% else %}
+    <div class="mt-4">
+        <p>You haven't searched for weather yet!</p>
+    </div>
+{% endif %}
 </div>
 {% endblock %}
