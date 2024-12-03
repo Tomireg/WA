@@ -58,13 +58,13 @@ def search_weather(request):
                         'humidity': weather_data['main']['humidity'],
                     }
                 )
-                return render(request, 'weather/search_results.html', {'weather_data': weather_data})
+                return render(request, 'users/weather_search.html', {'weather_data': weather_data})
             else:
-                return render(request, 'weather/search_results.html', {'error': weather_data['error']})
+                return render(request, 'users/weather_search.html', {'error': weather_data['error']})
     else:
         form = WeatherSearchForm()
 
-    return render(request, 'weather/search.html', {'form': form})
+    return render(request, 'users/weather_search.html', {'form': form})
 
 # Home view
 @login_required
