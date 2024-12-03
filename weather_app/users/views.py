@@ -47,7 +47,8 @@ def search_weather(request):
             location = form.cleaned_data['location']
             weather_data = get_weather_data(location)
 
-            if 'error' not in weather_data:
+            if weather_data:
+                # Save or update the last search for the user
                 LastWeatherSearch.objects.update_or_create(
                     user=request.user,
                     defaults={
@@ -58,9 +59,10 @@ def search_weather(request):
                         'humidity': weather_data['main']['humidity'],
                     }
                 )
+                # Ensure we're returning a standard HTTP response
                 return render(request, 'users/weather_search.html', {'weather_data': weather_data})
             else:
-                return render(request, 'users/weather_search.html', {'error': weather_data['error']})
+                return render(request, 'users/weather_search.html', {'error': 'City not found!'})
     else:
         form = WeatherSearchForm()
 
