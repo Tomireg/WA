@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import UserRegisterForm, WeatherSearchForm
-from .models import LastWeatherSearch
+from .models import WeatherSearch
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import requests
@@ -57,7 +57,7 @@ def search_weather(request):
 
             if weather_data:
                 # Save or update the last search for the user
-                last_search, created = LastWeatherSearch.objects.update_or_create(
+                last_search, created = WeatherSearch.objects.update_or_create(
                     user=request.user,
                     defaults={
                         'city_name': weather_data['name'],
@@ -68,7 +68,7 @@ def search_weather(request):
                     }
                 )
                 # Fetch the second-to-last search
-                second_last_search = LastWeatherSearch.objects.filter(user=request.user).exclude(id=last_search.id).order_by('-id').first()
+                second_last_search = WeatherSearch.objects.filter(user=request.user).exclude(id=last_search.id).order_by('-id').first()
 
                 # Check if the current search matches the last search
                 if last_search.city_name == weather_data['name']:
@@ -105,8 +105,8 @@ def home(request):
     last_search = None
     if request.user.is_authenticated:
         try:
-            last_search = LastWeatherSearch.objects.get(user=request.user)
-        except LastWeatherSearch.DoesNotExist:
+            last_search = WeatherSearch.objects.get(user=request.user)
+        except WeatherSearch.DoesNotExist:
             last_search = None
     
     # Ensure we're passing both last_search and the username to the template
