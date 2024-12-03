@@ -69,5 +69,13 @@ def search_weather(request):
 # Home view
 @login_required
 def home(request):
-    last_search = LastWeatherSearch.objects.filter(user=request.user).first()
-    return render(request, 'home.html', {'last_search': last_search})
+    last_search = None
+    if request.user.is_authenticated:
+        try:
+            last_search = LastWeatherSearch.objects.get(user=request.user)
+        except LastWeatherSearch.DoesNotExist:
+            last_search = None
+    
+    # Ensure we're passing both last_search and the username to the template
+    return render(request, 'home.html', {'last_search': last_search, 'username': request.user.username})
+

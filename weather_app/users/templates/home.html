@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container mt-4">
     <!-- Personalized welcome message -->
-    <h2>Welcome to the Weather App, {{ username|default:"Guest" }}!</h2>
+    <h2>Welcome to the Weather App, {{ username }}!</h2>
 
     <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
     <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
@@ -10,21 +10,16 @@
 
     <!-- Display last weather search if available -->
     {% if last_search %}
-<div class="card mt-4 shadow-sm">
-    <div class="card-body">
-        <h3 class="card-title">Your Last Search: Weather in {{ last_search.city_name }}</h3>
-        <div class="d-flex align-items-center">
-            <img src="https://openweathermap.org/img/wn/{{ last_search.icon }}@2x.png" alt="Weather icon" class="mr-3">
-            <div>
-                <p class="mb-1"><strong>Temperature:</strong> {{ last_search.temperature }}°C</p>
-                <p class="mb-1"><strong>Weather:</strong> {{ last_search.description }}</p>
-                <p class="mb-0"><strong>Humidity:</strong> {{ last_search.humidity }}%</p>
-            </div>
-        </div>
+    <div class="last-search">
+        <h2>Last Search:</h2>
+        <p><strong>City:</strong> {{ last_search.city_name }}</p>
+        <p><strong>Temperature:</strong> {{ last_search.temperature }}°C</p>
+        <p><strong>Description:</strong> {{ last_search.description }}</p>
+        <p><strong>Humidity:</strong> {{ last_search.humidity }}%</p>
+        <img src="https://openweathermap.org/img/wn/{{ last_search.icon }}@2x.png" alt="Weather icon">
     </div>
-</div>
 {% else %}
-<p>No recent searches found. Search for a city's weather to see it here!</p>
+    <p>No previous searches found.</p>
 {% endif %}
 </div>
 {% endblock %}
