@@ -13,15 +13,15 @@
     <!-- Display Last Weather Search -->
     <div class="card mt-4 shadow-sm">
         <div class="card-body">
-            <h3 class="card-title">Last Search: {{ last_search.city_name }}</h3>
+            <h3 class="card-title">Last Search: {{ user.last_search.city_name }}</h3>
             <div class="d-flex align-items-center">
                 <!-- Weather Icon -->
-                <img src="https://openweathermap.org/img/wn/{{ last_search.icon }}@2x.png" alt="Weather icon" class="mr-3">
+                <img src="https://openweathermap.org/img/wn/{{ user.last_search.icon }}@2x.png" alt="Weather icon" class="mr-3">
                 <!-- Weather Information -->
                 <div>
-                    <p class="mb-1"><strong>Temperature:</strong> {{ last_search.temperature }}°C</p>
-                    <p class="mb-1"><strong>Weather:</strong> {{ last_search.description }}</p>
-                    <p class="mb-0"><strong>Humidity:</strong> {{ last_search.humidity }}%</p>
+                    <p class="mb-1"><strong>Temperature:</strong> {{ user.last_search.temperature }}°C</p>
+                    <p class="mb-1"><strong>Weather:</strong> {{ user.last_search.description }}</p>
+                    <p class="mb-0"><strong>Humidity:</strong> {{ user.last_search.humidity }}%</p>
                 </div>
             </div>
         </div>
