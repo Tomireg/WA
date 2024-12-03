@@ -1,72 +1,73 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import UserRegisterForm, WeatherSearchForm
-from .models import WeatherSearch
+from .models import LastWeatherSearch
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import requests
 from django.conf import settings
 
-# Function to fetch weather data from OpenWeatherMap
+# Fetch weather data
 def get_weather_data(location):
-    api_key = settings.OPENWEATHERMAP_API_KEY  # It's better to store your API key in settings.py
+    api_key = settings.OPENWEATHERMAP_API_KEY
     base_url = 'http://api.openweathermap.org/data/2.5/weather'
-    url = f'{base_url}?q={location}&appid={api_key}&units=metric'  # Using metric to get temperature in Celsius
+    url = f'{base_url}?q={location}&appid={api_key}&units=metric'
     response = requests.get(url)
-    
-    if response.status_code == 200:
-        return response.json()  # Return the weather data as JSON
-    return None  # If the API request fails, return None
 
-# Custom logout view
+    if response.status_code == 200:
+        return response.json()
+    elif response.status_code == 404:
+        return {'error': 'City not found!'}
+    else:
+        return {'error': 'Error fetching weather data. Please try again later.'}
+
+# Custom logout
 def custom_logout(request):
     logout(request)
-    return render(request, 'users/logout.html')
+    return redirect('login')
 
-# Register view to handle user registration
+# User registration
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your account has been created! You can now log in.')
-            return redirect('login')  # Redirect to the login page after successful registration
+            return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
 
-# Weather search view to search for weather data
+# Weather search view
 @login_required
-def weather_search(request):
-    form = WeatherSearchForm(request.POST or None)
-    weather_data = None
+def search_weather(request):
+    if request.method == 'POST':
+        form = WeatherSearchForm(request.POST)
+        if form.is_valid():
+            location = form.cleaned_data['location']
+            weather_data = get_weather_data(location)
 
-    if form.is_valid():
-        location = form.cleaned_data['location']
-        weather_data = get_weather_data(location)  # Fetch weather data
+            if 'error' not in weather_data:
+                LastWeatherSearch.objects.update_or_create(
+                    user=request.user,
+                    defaults={
+                        'city_name': weather_data['name'],
+                        'temperature': weather_data['main']['temp'],
+                        'description': weather_data['weather'][0]['description'],
+                        'icon': weather_data['weather'][0]['icon'],
+                        'humidity': weather_data['main']['humidity'],
+                    }
+                )
+                return render(request, 'weather/search_results.html', {'weather_data': weather_data})
+            else:
+                return render(request, 'weather/search_results.html', {'error': weather_data['error']})
+    else:
+        form = WeatherSearchForm()
 
-        if weather_data:
-            # Save the weather search in the database
-            WeatherSearch.objects.create(
-                user=request.user,
-                location=location,
-                temperature=weather_data['main']['temp'],
-                description=weather_data['weather'][0]['description'],
-                humidity=weather_data['main']['humidity']
-            )
+    return render(request, 'weather/search.html', {'form': form})
 
-    return render(request, 'users/weather_search.html', {'form': form, 'weather_data': weather_data})
-
-# Home view to display the last weather search
+# Home view
 @login_required
 def home(request):
-    # Get the logged-in user's username
-    username = request.user.username
-
-    # Get the last weather search for the user
-    last_weather_search = WeatherSearch.objects.filter(user=request.user).order_by('-date_searched').first()
-
-    return render(request, 'home.html', {
-        'username': username,
-        'last_weather_search': last_weather_search
-    })
+    last_search = LastWeatherSearch.objects.filter(user=request.user).first()
+    return render(request, 'home.html', {'last_search': last_search})
