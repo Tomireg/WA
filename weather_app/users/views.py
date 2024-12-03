@@ -90,12 +90,19 @@ def search_weather(request):
 @login_required
 def home(request):
     last_search = None
-    if request.user.is_authenticated:
-        try:
-            last_search = WeatherSearch.objects.get(user=request.user)
-        except WeatherSearch.DoesNotExist:
-            last_search = None
-    
-    # Ensure we're passing both last_search and the username to the template
-    return render(request, 'home.html', {'last_search': last_search, 'username': request.user.username})
+    second_last_search = None
 
+    if request.user.is_authenticated:
+        # Get the last search
+        last_search = WeatherSearch.objects.filter(user=request.user).order_by('-search_date').first()
+        
+        # Get the second-to-last search
+        searches = WeatherSearch.objects.filter(user=request.user).order_by('-search_date')
+        if searches.count() > 1:  # Check if there are at least two searches
+            second_last_search = searches[1]  # Get the second search in the list
+
+    return render(request, 'home.html', {
+        'last_search': last_search,
+        'second_last_search': second_last_search,
+        'username': request.user.username
+    })

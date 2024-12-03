@@ -9,25 +9,18 @@
     <a href="{% url 'weather_search' %}" class="btn btn-info">Search Weather</a>
 
     <!-- Display last weather search if available -->
-    {% if last_search %}
-    <!-- Display Last Weather Search -->
+    {% if second_last_search %}
+    <!-- Second Last Search Card -->
     <div class="card mt-4 shadow-sm">
         <div class="card-body">
-            <h3 class="card-title">Last Search: {{ last_search.city_name }}</h3>
-            <div class="d-flex align-items-center">
-                <!-- Weather Icon -->
-                <img src="https://openweathermap.org/img/wn/{{ user.last_search.icon }}@2x.png" alt="Weather icon" class="mr-3">
-                <!-- Weather Information -->
-                <div>
-                    <p class="mb-1"><strong>Temperature:</strong> {{ last_search.temperature }}°C</p>
-                    <p class="mb-1"><strong>Weather:</strong> {{ last_search.description }}</p>
-                    <p class="mb-0"><strong>Humidity:</strong> {{ last_search.humidity }}%</p>
-                </div>
-            </div>
+            <h3 class="card-title">Your Second-to-Last Search</h3>
+            <p><strong>City:</strong> {{ second_last_search.city_name }}</p>
+            <p><strong>Temperature:</strong> {{ second_last_search.temperature }}°C</p>
+            <p><strong>Weather:</strong> {{ second_last_search.description }}</p>
+            <p><strong>Humidity:</strong> {{ second_last_search.humidity }}%</p>
+            <img src="https://openweathermap.org/img/wn/{{ second_last_search.icon }}@2x.png" alt="Weather icon">
         </div>
     </div>
-    {% else %}
-        <p>No previous weather search found.</p>
     {% endif %}
 
     {% if error %}
