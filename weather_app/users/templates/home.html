@@ -7,22 +7,7 @@
     <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
     <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
     <a href="{% url 'weather_search' %}" class="btn btn-info">Search Weather</a>
-
-    <!-- Display last weather search if available -->
-    {% if second_last_search %}
-    <!-- Second Last Search Card -->
-    <div class="card mt-4 shadow-sm">
-        <div class="card-body">
-            <h3 class="card-title">Your Second-to-Last Search</h3>
-            <p><strong>City:</strong> {{ second_last_search.city_name }}</p>
-            <p><strong>Temperature:</strong> {{ second_last_search.temperature }}°C</p>
-            <p><strong>Weather:</strong> {{ second_last_search.description }}</p>
-            <p><strong>Humidity:</strong> {{ second_last_search.humidity }}%</p>
-            <img src="https://openweathermap.org/img/wn/{{ second_last_search.icon }}@2x.png" alt="Weather icon">
-        </div>
-    </div>
-    {% endif %}
-
+    
     {% if error %}
         <div class="alert alert-danger mt-4">{{ error }}</div>
     {% endif %}

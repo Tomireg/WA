@@ -89,20 +89,4 @@ def search_weather(request):
 # Home view
 @login_required
 def home(request):
-    last_search = None
-    second_last_search = None
-
-    if request.user.is_authenticated:
-        # Get the last search
-        last_search = WeatherSearch.objects.filter(user=request.user).order_by('-search_date').first()
-        
-        # Get the second-to-last search
-        searches = WeatherSearch.objects.filter(user=request.user).order_by('-search_date')
-        if searches.count() > 1:  # Check if there are at least two searches
-            second_last_search = searches[1]  # Get the second search in the list
-
-    return render(request, 'home.html', {
-        'last_search': last_search,
-        'second_last_search': second_last_search,
-        'username': request.user.username
-    })
+    return render(request, 'home.html', {'username': request.user.username})
