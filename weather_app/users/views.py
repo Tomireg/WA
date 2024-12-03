@@ -6,6 +6,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import requests
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 # Fetch weather data
 def get_weather_data(location):
@@ -41,6 +45,7 @@ def register(request):
 # Weather search view
 @login_required
 def search_weather(request):
+    last_search = None  # Initialize last_search variable
     if request.method == 'POST':
         form = WeatherSearchForm(request.POST)
         if form.is_valid():
@@ -49,7 +54,7 @@ def search_weather(request):
 
             if weather_data:
                 # Save or update the last search for the user
-                LastWeatherSearch.objects.update_or_create(
+                last_search, created = LastWeatherSearch.objects.update_or_create(
                     user=request.user,
                     defaults={
                         'city_name': weather_data['name'],
@@ -59,14 +64,19 @@ def search_weather(request):
                         'humidity': weather_data['main']['humidity'],
                     }
                 )
-                # Ensure we're returning a standard HTTP response
-                return render(request, 'users/weather_search.html', {'weather_data': weather_data})
+                logger.info(f"Last search created: {created}, City: {weather_data['name']}")
+                # Pass the last_search to the template so it can be accessed
+                return render(request, 'users/weather_search.html', {'weather_data': weather_data, 'last_search': last_search})
             else:
+                logger.warning("Weather data was not found for the given location.")
                 return render(request, 'users/weather_search.html', {'error': 'City not found!'})
+        else:
+            logger.warning("Form was not valid.")
     else:
         form = WeatherSearchForm()
 
-    return render(request, 'users/weather_search.html', {'form': form})
+    # Pass the form and last_search to the template on GET request
+    return render(request, 'users/weather_search.html', {'form': form, 'last_search': last_search})
 
 # Home view
 @login_required

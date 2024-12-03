@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container mt-4">
     <!-- Personalized welcome message -->
-    <h2>Welcome to the Weather App, {{ username }}!</h2>
+    <h2>Welcome to the Weather App, {{ user.username }}!</h2>
 
     <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
     <a href="{% url 'login' %}" class="btn btn-secondary">Login</a>
