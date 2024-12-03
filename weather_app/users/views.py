@@ -45,7 +45,8 @@ def register(request):
 # Weather search view
 @login_required
 def search_weather(request):
-    last_search = None  # Initialize last_search variable
+    last_search = None  # Initialize last_search to None in case there is no previous search
+
     if request.method == 'POST':
         form = WeatherSearchForm(request.POST)
         if form.is_valid():
@@ -64,18 +65,22 @@ def search_weather(request):
                         'humidity': weather_data['main']['humidity'],
                     }
                 )
-                logger.info(f"Last search created: {created}, City: {weather_data['name']}")
-                # Pass the last_search to the template so it can be accessed
-                return render(request, 'users/weather_search.html', {'weather_data': weather_data, 'last_search': last_search})
+                # Optionally, log the result or print
+                print(f"Last search created: {created}, City: {weather_data['name']}, User: {request.user.username}")
+                print(f"Weather data: {weather_data}")  # Print the full weather data for debugging
+
+                return render(request, 'users/weather_search.html', {'form': form, 'last_search': last_search, 'weather_data': weather_data})
             else:
-                logger.warning("Weather data was not found for the given location.")
-                return render(request, 'users/weather_search.html', {'error': 'City not found!'})
+                # Handle if the weather data is not found
+                print(f"Weather data not found for {location}")
+                return render(request, 'users/weather_search.html', {'form': form, 'error': 'City not found!'})
         else:
-            logger.warning("Form was not valid.")
+            # Handle invalid form
+            print("Form is not valid.")
     else:
         form = WeatherSearchForm()
 
-    # Pass the form and last_search to the template on GET request
+    # Pass last_search and form to template if no POST request
     return render(request, 'users/weather_search.html', {'form': form, 'last_search': last_search})
 
 # Home view
