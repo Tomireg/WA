@@ -34,16 +34,16 @@
     </div>
     {% endif %}
 
-    {% if last_search %}
-    <!-- Last Search Card -->
+    {% if second_last_search %}
+    <!-- Second Last Search Card -->
     <div class="card mt-4 shadow-sm">
         <div class="card-body">
-            <h3 class="card-title">Your Last Search</h3>
-            <p><strong>City:</strong> {{ last_search.city_name }}</p>
-            <p><strong>Temperature:</strong> {{ last_search.temperature }}°C</p>
-            <p><strong>Weather:</strong> {{ last_search.description }}</p>
-            <p><strong>Humidity:</strong> {{ last_search.humidity }}%</p>
-            <img src="https://openweathermap.org/img/wn/{{ last_search.icon }}@2x.png" alt="Weather icon">
+            <h3 class="card-title">Your Second-to-Last Search</h3>
+            <p><strong>City:</strong> {{ second_last_search.city_name }}</p>
+            <p><strong>Temperature:</strong> {{ second_last_search.temperature }}°C</p>
+            <p><strong>Weather:</strong> {{ second_last_search.description }}</p>
+            <p><strong>Humidity:</strong> {{ second_last_search.humidity }}%</p>
+            <img src="https://openweathermap.org/img/wn/{{ second_last_search.icon }}@2x.png" alt="Weather icon">
         </div>
     </div>
     {% endif %}

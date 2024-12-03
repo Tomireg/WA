@@ -46,6 +46,8 @@ def register(request):
 @login_required
 def search_weather(request):
     last_search = None  # Initialize last_search to None in case there is no previous search
+    second_last_search = None  # Initialize second_last_search to None
+    same_search = False  # Flag to check if the current search is the same as the last search
 
     if request.method == 'POST':
         form = WeatherSearchForm(request.POST)
@@ -65,11 +67,24 @@ def search_weather(request):
                         'humidity': weather_data['main']['humidity'],
                     }
                 )
+                # Fetch the second-to-last search
+                second_last_search = LastWeatherSearch.objects.filter(user=request.user).exclude(id=last_search.id).order_by('-id').first()
+
+                # Check if the current search matches the last search
+                if last_search.city_name == weather_data['name']:
+                    same_search = True
+
                 # Optionally, log the result or print
                 print(f"Last search created: {created}, City: {weather_data['name']}, User: {request.user.username}")
                 print(f"Weather data: {weather_data}")  # Print the full weather data for debugging
 
-                return render(request, 'users/weather_search.html', {'form': form, 'last_search': last_search, 'weather_data': weather_data})
+                return render(request, 'users/weather_search.html', {
+                    'form': form,
+                    'last_search': last_search,
+                    'second_last_search': second_last_search,
+                    'weather_data': weather_data,
+                    'same_search': same_search
+                })
             else:
                 # Handle if the weather data is not found
                 print(f"Weather data not found for {location}")
@@ -81,7 +96,8 @@ def search_weather(request):
         form = WeatherSearchForm()
 
     # Pass last_search and form to template if no POST request
-    return render(request, 'users/weather_search.html', {'form': form, 'last_search': last_search})
+    return render(request, 'users/weather_search.html', {'form': form, 'last_search': last_search, 'second_last_search': second_last_search})
+
 
 # Home view
 @login_required
