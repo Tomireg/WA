@@ -45,9 +45,8 @@ def register(request):
 # Weather search view
 @login_required
 def search_weather(request):
-    last_search = None  # Initialize last_search to None in case there is no previous search
-    second_last_search = None  # Initialize second_last_search to None
-    same_search = False  # Flag to check if the current search is the same as the last search
+    last_search = None
+    second_last_search = None
 
     if request.method == 'POST':
         form = WeatherSearchForm(request.POST)
@@ -56,46 +55,34 @@ def search_weather(request):
             weather_data = get_weather_data(location)
 
             if weather_data:
-                # Save or update the last search for the user
-                last_search, created = WeatherSearch.objects.update_or_create(
+                # Save the new search
+                last_search = WeatherSearch.objects.create(
                     user=request.user,
-                    defaults={
-                        'city_name': weather_data['name'],
-                        'temperature': weather_data['main']['temp'],
-                        'description': weather_data['weather'][0]['description'],
-                        'icon': weather_data['weather'][0]['icon'],
-                        'humidity': weather_data['main']['humidity'],
-                    }
+                    city_name=weather_data['name'],
+                    temperature=weather_data['main']['temp'],
+                    description=weather_data['weather'][0]['description'],
+                    icon=weather_data['weather'][0]['icon'],
+                    humidity=weather_data['main']['humidity'],
                 )
+
                 # Fetch the second-to-last search
-                second_last_search = WeatherSearch.objects.filter(user=request.user).exclude(id=last_search.id).order_by('-id').first()
-
-                # Check if the current search matches the last search
-                if last_search.city_name == weather_data['name']:
-                    same_search = True
-
-                # Optionally, log the result or print
-                print(f"Last search created: {created}, City: {weather_data['name']}, User: {request.user.username}")
-                print(f"Weather data: {weather_data}")  # Print the full weather data for debugging
+                second_last_search = WeatherSearch.objects.filter(user=request.user).exclude(id=last_search.id).order_by('-search_date').first()
 
                 return render(request, 'users/weather_search.html', {
                     'form': form,
                     'last_search': last_search,
                     'second_last_search': second_last_search,
                     'weather_data': weather_data,
-                    'same_search': same_search
                 })
             else:
                 # Handle if the weather data is not found
-                print(f"Weather data not found for {location}")
                 return render(request, 'users/weather_search.html', {'form': form, 'error': 'City not found!'})
         else:
             # Handle invalid form
-            print("Form is not valid.")
+            pass
     else:
         form = WeatherSearchForm()
 
-    # Pass last_search and form to template if no POST request
     return render(request, 'users/weather_search.html', {'form': form, 'last_search': last_search, 'second_last_search': second_last_search})
 
 
