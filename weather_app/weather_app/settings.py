@@ -136,3 +136,5 @@ LOGIN_REDIRECT_URL = '/'  # Redirect to the home page after successful login
 LOGIN_URL = 'login'  # Redirect to the login page when a user is not authenticated
 
 OPENWEATHERMAP_API_KEY = "64fdfab1e43ab2e75e358c36d20e7469"
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
